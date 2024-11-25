@@ -1,5 +1,8 @@
-# Usa una imagen base con Maven y OpenJDK 21 para construir el proyecto
-FROM maven:3.9.1-openjdk-21 AS build
+# Usa la imagen oficial de Maven
+FROM maven:3.9.1 AS build
+
+# Instala OpenJDK 21
+RUN apt-get update && apt-get install -y openjdk-21-jdk
 
 # Establece el directorio de trabajo
 WORKDIR /app
@@ -16,7 +19,7 @@ COPY src ./src
 # Construye el archivo JAR
 RUN mvn clean package -DskipTests
 
-# Ahora, usa una imagen con OpenJDK para la aplicación final
+# Usa una imagen ligera de OpenJDK 21 para la ejecución de la app
 FROM openjdk:21-jdk-slim
 
 # Establece el directorio de trabajo
